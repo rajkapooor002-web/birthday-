@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forever Friends</title>
+
+    <style>
+        :root {
+            --bg1: #ffe2ef;
+            --bg2: #ffeaf5;
+            --bg3: #fff1e3;
+            --bg4: #ffefd7;
+            --card-bg: rgba(255, 255, 255, .95);
+            --text: #444;
+            --quote-bg: linear-gradient(135deg, #111, #1c1c1c);
+        }
+
+        body.dark {
+            --bg1: #0f0f14;
+            --bg2: #14141c;
+            --bg3: #1b1b26;
+            --bg4: #222230;
+            --card-bg: rgba(20, 20, 30, .95);
+            --text: #e6e6e6;
+            --quote-bg: linear-gradient(135deg, #000, #111);
+        }
+
+        body {
+            margin: 0;
+            padding: 50px;
+            font-family: Poppins, sans-serif;
+            background: linear-gradient(120deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* 🌙 Toggle */
+        .toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, .85);
+            padding: 10px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 999;
+        }
+
+        body.dark .toggle {
+            background: rgba(0, 0, 0, .6);
+            color: white;
+        }
+
+        /* 💖 Floating hearts */
+        .floating {
+            position: absolute;
+            bottom: -60px;
+            font-size: 22px;
+            animation: floatUp linear infinite;
+            opacity: .6;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-120vh) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        /* 🎬 Card */
+        .card {
+            max-width: 900px;
+            margin: auto;
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 45px;
+            box-shadow: 0 30px 80px rgba(200, 120, 150, .3);
+            opacity: 0;
+            transform: scale(.85) translateY(40px);
+            animation: cardOpen 1.2s ease forwards;
+        }
+
+        @keyframes cardOpen {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* ✨ Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(15px);
+            animation: reveal .8s ease forwards;
+        }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 42px;
+            background: linear-gradient(45deg, #ff4d6d, #ff9f68);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Friend msg */
+        .friend-msg {
+            background: #fff3f7;
+            border-left: 6px solid #ff6b81;
+            padding: 22px;
+            border-radius: 15px;
+            margin-top: 28px;
+            line-height: 1.9;
+        }
+
+        body.dark .friend-msg {
+            background: rgba(255, 255, 255, .05);
+        }
+
+        /* Quote */
+        .quote-msg {
+            background: var(--quote-bg);
+            color: white;
+            padding: 30px;
+            border-radius: 18px;
+            margin-top: 35px;
+            line-height: 2;
+        }
+
+        .quote-msg .heart {
+            color: #ff4d6d;
+            font-size: 22px;
+        }
+
+        p {
+            margin-top: 22px;
+            line-height: 1.9;
+        }
+
+        .highlight {
+            color: #ff4d6d;
+            font-weight: 600;
+        }
+
+        .wish-box {
+            margin-top: 35px;
+            background: linear-gradient(135deg, #ff8fa3, #ffb6c1);
+            padding: 25px;
+            border-radius: 18px;
+            color: white;
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        /* 📱 Mobile responsive */
+        @media(max-width:600px) {
+            body {
+                padding: 18px
+            }
+
+            .card {
+                padding: 22px;
+                border-radius: 20px
+            }
+
+            h1 {
+                font-size: 30px
+            }
+
+            p,
+            .friend-msg {
+                font-size: 15.5px;
+                line-height: 1.7
+            }
+
+            .toggle {
+                font-size: 18px;
+                padding: 8px 14px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toggle" onclick="toggleMode()">🌙</div>
+
+    <script>
+        /* 💖 Floating hearts */
+        const emojis = ["❤️", "💖", "💕", "💗", "🌸", "🎈"];
+        for (let i = 0; i < 40; i++) {
+            const h = document.createElement("div");
+            h.className = "floating";
+            h.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            h.style.left = Math.random() * 100 + "vw";
+            h.style.animationDuration = (5 + Math.random() * 6) + "s";
+            h.style.fontSize = (16 + Math.random() * 24) + "px";
+            document.body.appendChild(h);
+        }
+
+        /* ✨ Reveal delay */
+        window.onload = () => {
+            document.querySelectorAll(".reveal").forEach((el, i) => {
+                el.style.animationDelay = `${1.2 + i * 0.6}s`;
+            });
+        };
+
+        function toggleMode() {
+            document.body.classList.toggle("dark");
+        }
+    </script>
+
+    <div class="card">
+
+        <h1 class="reveal">Happy Birthday, Bestuuuu! 🎉💗</h1>
+
+        <div class="friend-msg reveal">
+            <b>Dear Bestuuu ❤️🫶</b><br><br>
+            You're someone I found as a stranger, but today you're a part of my heart.
+            Whenever I need someone to share my feelings with, I look up to you.
+            I know I can irritate you, tease you, make you angry…
+            but our friendship will never break because of such small things.
+            <br><br>
+            You're the only one I'm truly comfortable with.
+            I don't want many friends — I just want <b>you</b> as my best friend forever.
+            I'm very lucky to have you. 💞🥺💗✨
+        </div>
+
+        <div class="quote-msg reveal">
+            I’m sorry if someday I sound rude or distant because of my own mess.
+            It’s not because I don’t care.
+            <br><br>
+            It’s because you are the closest, the safest place I know.
+            I don’t always know how to handle my feelings,
+            and sometimes they spill the wrong way.
+            <br><br>
+            Please promise you won’t leave during that phase.
+            I need you, not just on good days, but till the end.
+            <span class="heart">❤️</span>
+        </div>
+
+        <p class="reveal">
+            Do you remember? We met on <span class="highlight">August 9, 2025</span>.
+            It still feels so fresh, but so much has changed since then — in the best way possible.
+        </p>
+
+        <p class="reveal">
+            Even though it hasn’t been very long, you’ve become one of the most important people in my life.
+            The bond we share is honestly special, and I truly treasure our friendship.
+        </p>
+
+        <p class="reveal">
+            It’s a little funny to think that we haven’t even met in real life yet —
+            and still, through games, endless conversations, late replies, and random moments,
+            you’ve become someone who feels incredibly close to my heart.
+            Distance never mattered, because the comfort, understanding, and connection were always real.
+            And I keep thinking about the day we finally meet —
+            how we’ll go shopping together, laugh over silly choices,
+            have lunch at some cozy place, watch movies side by side,
+            and just wander around, talking about everything and nothing at all.
+            There are so many places I want to go with you,
+            so many moments I want us to create together.
+        </p>
+
+        <p class="reveal">
+            when we finally meet, I imagine it being beautifully awkward in the best way —
+            we’ll probably just stand there smiling like idiots, laughing for 15–20 minutes straight,
+            not knowing what to say, just happy to see each other for real.
+            Then we’ll start talking nonsense, saying random things,
+            teasing each other, making fun of everything,
+            and slowly realizing that nothing has really changed —
+            it’s still us, just together in the same place.
+        </p>
+
+        <p class="reveal">
+            And honestly, when we meet, we won’t act normal at all. We’ll laugh first, then laugh some more, and then forget why we were laughing in the first place.
+            For 15–20 minutes, we’ll just stare at each other, smiling like fools,thinking, “Is this really happening?”
+            Then we’ll start talking absolute nonsense —inside jokes that make no sense to anyone else, random stories, silly arguments, and probably embarrassing ourselves a little.
+            But that’s the fun part — being completely stupid, comfortable, and real with each other.
+        </p>
+
+
+        <p class="reveal">
+            I want you to know that <span class="highlight">I’ll always be there for you</span>.
+            Through all the ups and downs, the late-night talks, laughter, overthinking,
+            and everything in between — I want to walk through life as your friend.
+        </p>
+
+        <p class="reveal">
+            No matter where life takes us or how much things change,
+            I hope we always choose each other the same way we do today.
+            Even in silence, distance, or chaos — I’ll still be right here,
+            cheering for you, supporting you, and caring for you in my own way.
+        </p>
+
+        <div class="wish-box reveal">
+            Wishing you the most beautiful year ahead — filled with joy, success,
+            peace, and all the moments that make your heart happy! 🎂✨
+        </div>
+
+        <div class="footer reveal">
+            <b>– from your singhade-si-shakal 😌💗</b>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
